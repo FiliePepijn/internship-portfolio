@@ -1,0 +1,54 @@
+@import url("https://use.typekit.net/gyq5jpu.css");
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap");
+@import "tailwindcss";
+
+#root {
+
+  margin: 0 ;
+  padding: 0 ;
+  text-align: center;
+  font-family: "Sora", sans-serif;
+
+  overflow-x: hidden;
+}
+
+:root {
+  --dark: #2a2214;
+  --light: #fff5ea;
+}
+
+
+
+/* Light mode */
+@media (prefers-color-scheme: light) {
+  body {
+    background-color: var(--light);
+    color: var(--dark);
+  }
+  button {
+    background-color: var(--dark);
+    color: var(--light);
+  }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: var(--dark);
+    color: var(--light);
+  }
+  button {
+    background-color: var(--light);
+    color: var(--dark);
+  }
+}
+
+
+
+
+
+
+
+
+
+
