@@ -3,9 +3,8 @@
 @import "tailwindcss";
 
 #root {
-
-  margin: 0 ;
-  padding: 0 ;
+  margin: 0;
+  padding: 0;
   text-align: center;
   font-family: "Sora", sans-serif;
 
@@ -17,7 +16,18 @@
   --light: #fff5ea;
 }
 
+.timeline-vertical-container {
+  position: relative;
+}
 
+.timeline-vertical-event {
+  position: relative;
+  z-index: 10;
+}
+
+.timeline-vertical-dot {
+  z-index: 10;
+}
 
 /* Light mode */
 @media (prefers-color-scheme: light) {
@@ -42,13 +52,3 @@
     color: var(--dark);
   }
 }
-
-
-
-
-
-
-
-
-
-
