@@ -1,3 +1,7 @@
-name = "internship-portfolio"
-compatibility_date = "2024-06-01"
-pages_build_output_dir = "./dist"
+{
+  "name": "internship-portfolio",
+  "compatibility_date": "2024-06-01",
+  "pages_build_output_dir": "./dist"
+
+}
+
