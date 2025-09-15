@@ -1,9 +1,9 @@
 import React, { forwardRef } from "react";
 
-const ContentSection = forwardRef(({ title, text, titleRef, textRef, onNext, nextText = "Next" }, ref) => (
+const ContentSection = forwardRef(({ title, text, titleRef, textRef, onNext, nextText = "Next", children }, ref) => (
   <section
     ref={ref}
-    className="w-screen flex flex-row flex-wrap justify-evenly items-center opacity-0 absolute bg-light dark:bg-dark transition duration-500"
+    className="w-screen flex flex-row flex-wrap justify-evenly items-center opacity-0 absolute bg-light dark:bg-dark transition duration-500 pointer-events-none"
   >
     <h1
       ref={titleRef}
@@ -17,6 +17,7 @@ const ContentSection = forwardRef(({ title, text, titleRef, textRef, onNext, nex
     >
       {text}
     </p>
+    {children}
     {onNext && (
       <button
         onClick={onNext}

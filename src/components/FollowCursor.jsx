@@ -4,7 +4,11 @@ import { gsap } from "gsap";
 
 const FollowCursor = () => {
   const dotRef = useRef(null);
+  const layerRef = useRef(null);
+  const particlesRef = useRef(null);
   const cursorPos = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+  const lastTrailTime = useRef(0);
+  const magnetic = useRef({ active: false, el: null });
 
   useEffect(() => {
     document.body.style.cursor = "none";
@@ -15,20 +19,24 @@ const FollowCursor = () => {
     // Mouse move updates target position
     const handleMouseMove = (e) => {
       cursorPos.current = { x: e.clientX, y: e.clientY };
-      // Dot follows instantly with some easing
+      // Dot follows with easing
       gsap.to(dot, {
         x: e.clientX,
         y: e.clientY,
         xPercent: -50,
         yPercent: -50,
         ease: "power3.out",
-        duration: 0.15,
+        duration: 0.12,
       });
     };
 
+    
+
+    
+
+    
+
     window.addEventListener("mousemove", handleMouseMove);
-
-
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
@@ -37,7 +45,9 @@ const FollowCursor = () => {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 w-full h-screen pointer-events-none overflow-hidden z-50">
+    <div ref={layerRef} className="fixed top-0 left-0 w-full h-screen pointer-events-none overflow-hidden z-50">
+      {/* Particles container */}
+      <div ref={particlesRef} className="absolute inset-0" />
       {/* Dot cursor */}
       <div
         ref={dotRef}
