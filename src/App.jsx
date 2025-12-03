@@ -1,65 +1,167 @@
 import "./App.css";
-import { Progress } from "@base-ui-components/react/progress";
 import React, { useEffect, useState, useRef } from "react";
+import { Helmet } from "react-helmet-async";
 import ContentSection from "./components/ContentSection";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import FollowCursor from "./components/FollowCursor";
-import ScrollToaster from "./components/ScrollToaster";
-import ProjectPlanOverlay from "./components/ProjectPlanOverlay";
+import ProjectCard from "./components/ProjectCard";
+import ProjectDetails from "./components/ProjectDetails";
 
 // Register plugins
 gsap.registerPlugin(ScrollTrigger, SplitText);
+
+// Project data
+const projects = [
+  {
+    id: 1,
+    title: "E-Commerce Platform",
+    shortDescription: "A full-stack e-commerce solution with real-time inventory management.",
+    fullDescription: "Built a comprehensive e-commerce platform featuring user authentication, product catalog, shopping cart, and secure payment processing. Implemented real-time inventory tracking and admin dashboard for store management.",
+    icon: "🛒",
+    tags: ["React", "Node.js", "MongoDB", "Stripe"],
+    technologies: ["React", "Node.js", "Express", "MongoDB", "Stripe API", "Redux", "Tailwind CSS"],
+    features: [
+      "User authentication and authorization",
+      "Real-time inventory management",
+      "Secure payment processing with Stripe",
+      "Admin dashboard for product and order management",
+      "Responsive design for mobile and desktop"
+    ],
+    githubUrl: "https://github.com/platour/ecommerce-platform",
+    liveUrl: "https://demo-ecommerce.platour.net"
+  },
+  {
+    id: 2,
+    title: "Task Management App",
+    shortDescription: "Collaborative task management tool with team features.",
+    fullDescription: "A modern task management application that helps teams organize their work efficiently. Features include drag-and-drop task boards, real-time collaboration, and progress tracking.",
+    icon: "✓",
+    tags: ["React", "Firebase", "TypeScript"],
+    technologies: ["React", "TypeScript", "Firebase", "React DnD", "Material-UI"],
+    features: [
+      "Drag-and-drop kanban boards",
+      "Real-time collaboration",
+      "Task assignments and deadlines",
+      "Project progress tracking",
+      "Team notifications"
+    ],
+    githubUrl: "https://github.com/platour/task-manager",
+    liveUrl: "https://tasks.platour.net"
+  },
+  {
+    id: 3,
+    title: "Weather Dashboard",
+    shortDescription: "Beautiful weather forecasting app with location-based predictions.",
+    fullDescription: "An elegant weather dashboard that provides accurate weather forecasts using multiple weather APIs. Features location-based weather, hourly and weekly forecasts, and interactive maps.",
+    icon: "🌤️",
+    tags: ["React", "API Integration", "Charts"],
+    technologies: ["React", "OpenWeather API", "Chart.js", "Leaflet", "CSS3"],
+    features: [
+      "Current weather conditions",
+      "7-day weather forecast",
+      "Hourly predictions",
+      "Interactive weather maps",
+      "Location-based weather"
+    ],
+    githubUrl: "https://github.com/platour/weather-dashboard",
+    liveUrl: "https://weather.platour.net"
+  },
+  {
+    id: 4,
+    title: "Portfolio Website Builder",
+    shortDescription: "Drag-and-drop portfolio builder for creators and developers.",
+    fullDescription: "A no-code solution for creating beautiful portfolio websites. Users can choose from multiple templates, customize them with drag-and-drop interface, and deploy instantly.",
+    icon: "🎨",
+    tags: ["React", "Builder", "Templates"],
+    technologies: ["React", "React DnD", "Cloudflare Pages", "Tailwind CSS", "Framer Motion"],
+    features: [
+      "Multiple professional templates",
+      "Drag-and-drop editor",
+      "Custom domain support",
+      "One-click deployment",
+      "Mobile responsive"
+    ],
+    githubUrl: "https://github.com/platour/portfolio-builder"
+  },
+  {
+    id: 5,
+    title: "Chat Application",
+    shortDescription: "Real-time messaging platform with video call support.",
+    fullDescription: "A modern chat application with real-time messaging, file sharing, and video call capabilities. Built with WebRTC for peer-to-peer connections and Socket.io for instant messaging.",
+    icon: "💬",
+    tags: ["React", "WebRTC", "Socket.io"],
+    technologies: ["React", "Node.js", "Socket.io", "WebRTC", "MongoDB", "Express"],
+    features: [
+      "Real-time messaging",
+      "Video and audio calls",
+      "File sharing",
+      "Group chats",
+      "Message encryption"
+    ],
+    githubUrl: "https://github.com/platour/chat-app",
+    liveUrl: "https://chat.platour.net"
+  },
+  {
+    id: 6,
+    title: "Analytics Dashboard",
+    shortDescription: "Data visualization platform with customizable charts and reports.",
+    fullDescription: "A comprehensive analytics dashboard for visualizing business metrics and KPIs. Features real-time data updates, customizable charts, and exportable reports.",
+    icon: "📊",
+    tags: ["React", "D3.js", "Data Viz"],
+    technologies: ["React", "D3.js", "Chart.js", "PostgreSQL", "Node.js", "Express"],
+    features: [
+      "Real-time data visualization",
+      "Customizable dashboards",
+      "Multiple chart types",
+      "Export to PDF/CSV",
+      "Advanced filtering"
+    ],
+    githubUrl: "https://github.com/platour/analytics-dashboard",
+    liveUrl: "https://analytics.platour.net"
+  }
+];
 
 function App() {
   const [darkMode] = useState(
     () => window.matchMedia("(prefers-color-scheme: dark)").matches
   );
-  const [progress, setProgress] = useState(0);
   const progressTextRef = useRef(null);
-  const [open, setOpen] = useState(false);
-  const [timelineProgress, setTimelineProgress] = useState(0);
+  const [selectedProject, setSelectedProject] = useState(null);
   const progressFillRef = useRef(null);
 
   const siteRef = useRef(null);
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
 
-  const loadingRef = useRef(null);
-  const loadingTitleRef = useRef(null);
-  const loadingbarRef = useRef(null);
-
   const welcomeRef = useRef(null);
   const welcomeTitleRef = useRef(null);
   const welcomeTextRef = useRef(null);
 
-  const soramaRef = useRef(null);
-  const soramaTitleRef = useRef(null);
-  const soramaTextRef = useRef(null);
+  const aboutRef = useRef(null);
+  const aboutTitleRef = useRef(null);
+  const aboutTextRef = useRef(null);
 
-  const item1Ref = useRef(null);
-  const item1TitleRef = useRef(null);
-  const item1TextRef = useRef(null);
+  const skillsRef = useRef(null);
+  const skillsTitleRef = useRef(null);
+  const skillsTextRef = useRef(null);
 
-  const researchRef = useRef(null);
-  const researchTitleRef = useRef(null);
-  const researchTextRef = useRef(null);
+  const projectsRef = useRef(null);
+  const projectsTitleRef = useRef(null);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", darkMode);
   }, [darkMode]);
 
   useEffect(() => {
-    if (!titleRef.current || !subtitleRef.current || !loadingTitleRef.current)
+    if (!titleRef.current || !subtitleRef.current)
       return;
 
     // Split text into characters/words
     const titleSplit = new SplitText(titleRef.current, { type: "chars" });
     const subtitleSplit = new SplitText(subtitleRef.current, { type: "chars" });
-    const loadingSplit = new SplitText(loadingTitleRef.current, {
-      type: "chars",
-    });
+
     const chars = [...titleSplit.chars, ...subtitleSplit.chars];
     const welcomeTitleSplit = new SplitText(welcomeTitleRef.current, {
       type: "words",
@@ -73,8 +175,6 @@ function App() {
         end: "+=10000", // enough scroll room
         scrub: 1,
         pin: true,
-
-        onUpdate: (self) => setTimelineProgress(self.progress),
       },
     });
 
@@ -91,38 +191,6 @@ function App() {
       stagger: 0.02,
       duration: 1.5,
     });
-
-    // ---------------------------
-    // Loading
-    // ---------------------------
-    master
-      .set(loadingRef.current, { pointerEvents: "auto" })
-      .to(loadingRef.current, { opacity: 1, duration: 1 })
-      .from(loadingSplit.chars, {
-        y: 50,
-        opacity: 0,
-        stagger: 0.5,
-        duration: 1,
-        ease: "power3.out",
-      })
-      .fromTo(
-        loadingbarRef.current,
-        { opacity: 0, y: 0 },
-        { opacity: 1, y: 0, duration: 0.5, ease: "power1.in" }
-      )
-      .to(
-        { val: 0 },
-        {
-          val: 100,
-          duration: 5,
-          ease: "none",
-          onUpdate: function () {
-            setProgress(Math.round(this.targets()[0].val));
-          },
-        }
-      )
-      .to(loadingRef.current, { opacity: 0, duration: 1, ease: "power3.out" })
-      .set(loadingRef.current, { pointerEvents: "none" });
 
     // ---------------------------
     // Welcome
@@ -146,66 +214,61 @@ function App() {
       .set(welcomeRef.current, { pointerEvents: "none" });
 
     // ---------------------------
-    // Sorama
+    // About
     // ---------------------------
     master
-      .set(soramaRef.current, { pointerEvents: "auto" })
-      .to(soramaRef.current, { opacity: 1, duration: 1 })
+      .set(aboutRef.current, { pointerEvents: "auto" })
+      .to(aboutRef.current, { opacity: 1, duration: 1 })
       .fromTo(
-        soramaTitleRef.current,
+        aboutTitleRef.current,
         { y: 50, opacity: 0 },
         { y: 0, opacity: 1, duration: 1, ease: "power3.out" }
       )
       .fromTo(
-        soramaTextRef.current,
+        aboutTextRef.current,
         { x: 100, opacity: 0 },
         { x: 0, opacity: 1, duration: 1, ease: "power3.out" }
       )
-      .to(soramaRef.current, {
+      .to(aboutRef.current, {
         opacity: 0,
         duration: 1,
         x: -1000,
         ease: "power3.out",
       })
-      .set(soramaRef.current, { pointerEvents: "none" });
+      .set(aboutRef.current, { pointerEvents: "none" });
 
     // ---------------------------
-    // Item 1
+    // Skills
     // ---------------------------
     master
-      .set(item1Ref.current, { pointerEvents: "auto" })
-      .to(item1Ref.current, { opacity: 1, duration: 1 })
+      .set(skillsRef.current, { pointerEvents: "auto" })
+      .to(skillsRef.current, { opacity: 1, duration: 1 })
       .fromTo(
-        item1TitleRef.current,
+        skillsTitleRef.current,
         { y: 50, opacity: 0 },
         { y: 0, opacity: 1, duration: 1, ease: "power3.out" }
       )
       .fromTo(
-        item1TextRef.current,
+        skillsTextRef.current,
         { x: 100, opacity: 0 },
         { x: 0, opacity: 1, duration: 1, ease: "power3.out" }
       )
-      .to(item1Ref.current, {
+      .to(skillsRef.current, {
         opacity: 0,
         duration: 1,
         x: -1000,
         ease: "power3.out",
       })
-      .set(item1Ref.current, { pointerEvents: "none" });
+      .set(skillsRef.current, { pointerEvents: "none" });
 
     // ---------------------------
-    // Research
+    // Projects
     // ---------------------------
     master
-      .set(researchRef.current, { pointerEvents: "auto" })
-      .to(researchRef.current, { opacity: 1, duration: 1 })
+      .set(projectsRef.current, { pointerEvents: "auto" })
+      .to(projectsRef.current, { opacity: 1, duration: 1 })
       .fromTo(
-        researchTitleRef.current,
-        { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, ease: "power3.out" }
-      )
-      .fromTo(
-        researchTextRef.current,
+        projectsTitleRef.current,
         { y: 50, opacity: 0 },
         { y: 0, opacity: 1, duration: 1, ease: "power3.out" }
       );
@@ -214,7 +277,6 @@ function App() {
     return () => {
       titleSplit.revert();
       subtitleSplit.revert();
-      loadingSplit.revert();
       welcomeTitleSplit.revert();
       ScrollTrigger.getAll().forEach((st) => st.kill());
     };
@@ -243,9 +305,26 @@ function App() {
 
 
   return (
-    <main className="w-screen overflow-x-hidden">
-      <FollowCursor />
-      <ScrollToaster />
+    <>
+      <Helmet>
+        <title>platour.net - Developer Portfolio</title>
+        <meta name="description" content="Full-stack developer portfolio showcasing projects in React, Node.js, and modern web technologies. View my work and get in touch." />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://platour.net/" />
+        <meta property="og:title" content="platour.net - Developer Portfolio" />
+        <meta property="og:description" content="Full-stack developer portfolio showcasing projects in React, Node.js, and modern web technologies." />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://platour.net/" />
+        <meta name="twitter:title" content="platour.net - Developer Portfolio" />
+        <meta name="twitter:description" content="Full-stack developer portfolio showcasing projects in React, Node.js, and modern web technologies." />
+      </Helmet>
+
+      <main className="w-screen overflow-x-hidden">
+        <FollowCursor />
 
       <div
         ref={siteRef}
@@ -257,42 +336,17 @@ function App() {
             ref={subtitleRef}
             className="text-dark dark:text-light text-2xl sm:text-3xl"
           >
-            Internship Portfolio
+            Developer Portfolio
           </h2>
           <h1
             ref={titleRef}
             className="text-dark dark:text-light font-bold text-[3rem] sm:text-[5rem] md:text-[7rem] lg:text-[9rem] xl:text-[11rem] 2xl:text-[13rem]"
           >
-            Pepijn Latour
+            platour.net
           </h1>
         </section>
 
-        {/* Loading Section */}
-        <section
-          ref={loadingRef}
-          className="h-screen w-screen flex flex-col items-center justify-center opacity-0 absolute top-0 left-0 bg-light dark:bg-dark transition duration-500"
-        >
-          <h1
-            ref={loadingTitleRef}
-            className="flex font-black text-[5rem] sm:text-[5rem] md:text-[7rem] lg:text-[9rem] xl:text-[11rem] 2xl:text-[13rem] mb-10 text-dark dark:text-light"
-          >
-            Loading
-          </h1>
-          <div ref={loadingbarRef} className="w-full flex justify-center m-5">
-            <Progress.Root value={progress}>
-              <Progress.Track className="rounded h-2 m-2 w-72 outline-[3px] outline-[var(--dark)] dark:outline-[var(--light)]">
-                <Progress.Indicator
-                  className="bg-[var(--dark)] dark:bg-[var(--light)] h-2 rounded"
-                  style={{
-                    width: `${progress}%`,
-                    transition: "width 0.1s linear",
-                  }}
-                />
-              </Progress.Track>
-              <Progress.Value />
-            </Progress.Root>
-          </div>
-        </section>
+
 
         {/* welcome Section */}
         <section
@@ -309,60 +363,54 @@ function App() {
             ref={welcomeTextRef}
             className="max-w-[300px] text-center mb-10   text-dark dark:text-light"
           >
-            This is my portfolio where I will showcase my internship project at
-            Sorama.
+            This is my portfolio showcasing my projects and skills as a full-stack developer.
           </p>
         </section>
 
         <ContentSection
-          ref={soramaRef}
-          titleRef={soramaTitleRef}
-          textRef={soramaTextRef}
-          title="Who is Sorama"
-          text="Use the Sorama-style sensor to scan for an (imaginary) leak. The stronger the signal, the closer you are."
+          ref={aboutRef}
+          titleRef={aboutTitleRef}
+          textRef={aboutTextRef}
+          title="About Me"
+          text="I'm a passionate full-stack developer specializing in React, Node.js, and modern web technologies. I love building beautiful, user-friendly applications that solve real-world problems."
         >
           <div className="mt-6"></div>
         </ContentSection>
 
         <ContentSection
-          ref={item1Ref}
-          titleRef={item1TitleRef}
-          textRef={item1TextRef}
-          title="My work at Sorama"
-          text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nisl quam, varius a eros vitae, viverra dignissim erat. Praesent quis leo placerat, lacinia ipsum sed, pulvinar ligula. Morbi tempor nibh eget ipsum convallis, ac molestie eros luctus. Mauris laoreet metus nec dolor blandit, vitae pellentesque eros venenatis. Suspendisse at tempus augue. In at nisl ut diam posuere rhoncus. Nunc vitae tellus pellentesque, tempor dui ac, aliquam elit. Phasellus sed nunc risus. Fusce scelerisque tempor sagittis. Donec ullamcorper mi neque, quis aliquet massa blandit in."
+          ref={skillsRef}
+          titleRef={skillsTitleRef}
+          textRef={skillsTextRef}
+          title="My Skills"
+          text="Frontend: React, TypeScript, Tailwind CSS, GSAP • Backend: Node.js, Express, MongoDB, PostgreSQL • Tools: Git, Docker, Cloudflare, Firebase • Design: Responsive UI/UX, Animation, Accessibility"
         />
 
         <section
-          ref={researchRef}
-          className="w-screen flex flex-row flex-wrap justify-evenly items-center opacity-0 absolute bg-light dark:bg-dark transition duration-500"
+          ref={projectsRef}
+          className="w-screen min-h-screen flex flex-col items-center justify-start opacity-0 absolute bg-light dark:bg-dark transition duration-500 p-8 overflow-y-auto"
         >
-          <div className="flex flex-col justify-center items-left mt-10 gap-6">
-            <h1
-              ref={researchTitleRef}
-              className="text-4xl w-1/3 text-center font-bold text-dark dark:text-light"
-            >
-              Research
-            </h1>
-            <p
-              ref={researchTextRef}
-              className="max-w-[300px] sm:max-w-lg text-left text-dark dark:text-light"
-            >
-              For the first part of the project I had to set up a React
-              environment, to to understand the basics of React and how it
-              works. I had to do some research on what framework to use and if i
-              wanted to use a component ui library. I decided to use Tailwind
-              CSS as the framework and I used a component library called Base UI
-              components.
-            </p>
-          </div>
-          <button
-            onClick={() => setOpen(true)}
-            className="mt-6 px-4 py-2 rounded-md bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] hover:opacity-90"
+          <h1
+            ref={projectsTitleRef}
+            className="text-4xl font-bold mb-10 text-dark dark:text-light"
           >
-            Open Research Doc
-          </button>
-          <ProjectPlanOverlay open={open} onClose={() => setOpen(false)} />
+            My Projects
+          </h1>
+          <div className="flex flex-wrap gap-6 justify-center max-w-7xl">
+            {projects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                onClick={setSelectedProject}
+              />
+            ))}
+          </div>
         </section>
+
+        <ProjectDetails
+          project={selectedProject}
+          open={!!selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
       </div>
 
       <div className="fixed w-screen left-0 right-0 bottom-0 z-20 px-4 pointer-events-none">
@@ -387,6 +435,7 @@ function App() {
 </div>
 
     </main>
+    </>
   );
 }
 
